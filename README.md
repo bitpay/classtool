@@ -1,5 +1,5 @@
-Classtool
-=========
+Classy
+======
 
 This is a simple tool to enable class like idioms in JavaScript.  It is notably different
 from traditional class based inheritance in the following ways:
@@ -31,7 +31,7 @@ The following is an example class definition:
     };
     module.defineClass(ClassSpec); 
 
-To use classtool, simply require it at the beginning of your program:
+To use classy, simply require it at the beginning of your program:
 
     require('classtool');
 
