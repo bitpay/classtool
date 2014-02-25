@@ -4,7 +4,7 @@
 // to the outside world.  This approach allows a class to be instantiated 
 // multiple times, which enables a more compositional approach to inheritance. 
 
-module.__proto__.defineClass = function(classConstructor) {
+var defineClass = function(classConstructor) {
   var self = this;
   var classes = {};
   var defaultInstance;
@@ -59,7 +59,7 @@ module.__proto__.defineClass = function(classConstructor) {
   // Public createClass() function - creates a new class with the given
   // bindings and an optional name...the name, if given, can be used to
   // later recall the same class instance using class())
-  this.exports.createClass = function(name, bindings) {
+  var createClass = function(name, bindings) {
     if(typeof name != 'string') return _createClass(name);
     classes[name] = function() {return tmp.apply(this, arguments);};
     var tmp = _createClass(bindings);
@@ -71,7 +71,7 @@ module.__proto__.defineClass = function(classConstructor) {
   // override the default bindings with this method, use createClass() if
   // you need to override the default bindings).  If the name is omitted, 
   // use 'default'
-  this.exports.class = function(name) {
+  var class_ = function(name) {
     name = name || 'default';
     if(classes[name]) return classes[name];
     return this.createClass(name);
@@ -79,17 +79,28 @@ module.__proto__.defineClass = function(classConstructor) {
 
   // Public default() method - This is a convenience function to 
   // create and retain a default instance
-  this.exports.default = function() {
+  var default_ = function() {
     if(!defaultInstance) defaultInstance = this.new();
     return defaultInstance;
   };
 
   // Public new() method - This is a convenience function to create a 
   // new instance of the "default" class instance
-  this.exports.new = function() {
+  var new_ = function() {
     var ClassInstance = this.class();
     var answer = Object.create(ClassInstance.prototype);
     ClassInstance.apply(answer, arguments);
     return answer;
   };
+
+  factory = {};
+  factory.createClass = createClass;
+  factory.class = class_;
+  factory.default = default_;
+  factory.new = new_;
+  this.exports = factory.class();
+  this.exports.factory = factory;
+
 };
+
+module.__proto__.defineClass = defineClass;
